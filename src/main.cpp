@@ -49,10 +49,9 @@ class $modify(MenuLayer) {
 		if (auto btm = typeinfo_cast<CCMenu*>(this->getChildByID("bottom-menu")))	btm->updateLayout();
 		if (auto clm = typeinfo_cast<CCMenu*>(this->getChildByID("close-menu")))	clm->updateLayout();
 		
-		// pad the large two buttons to make them larger
-
-		auto playSprite = ButtonSprite::create("Play");
-		auto editorSprite = ButtonSprite::create("Editor");
+		// pad the play and editor buttons with spaces to make the clickable area larger than it actually is
+		auto playSprite = ButtonSprite::create("     Play     ");
+		auto editorSprite = ButtonSprite::create("     Editor     ");
 		auto iconsSprite = ButtonSprite::create("Icon Kit");
 		auto modsSprite = ButtonSprite::create("Mods");
 		auto optionsSprite = ButtonSprite::create("Options");
@@ -110,7 +109,10 @@ class $modify(MenuLayer) {
 			optionsAndQuitMenu->setLayout(AxisLayout::create());
 			if (auto rawLayout = optionsAndQuitMenu->getLayout())
 				if (auto layout = typeinfo_cast<AxisLayout*>(rawLayout))
+				{
 					layout->setAxisAlignment(AxisAlignment::Even);
+					layout->setGap(8); // more random spacing fuckery
+				}
 
 			optionsAndQuitMenu->addChild(optionsButton);
 			optionsAndQuitMenu->addChild(quitButton);
@@ -119,7 +121,9 @@ class $modify(MenuLayer) {
 			optionsAndQuitMenu->setPositionY(optionsAndQuitMenu->getPositionY() - 0.920f); // add more padding above it
 			mainMenu->addChild(optionsAndQuitMenu);
 
-			mainMenu->setPositionY(147);
+			mainMenu->setPositionY(218);
+			mainMenu->setAnchorPoint(CCPoint{ 0.5, 1 });
+			mainMenu->setScale(Mod::get()->getSettingValue<double>("scale"));
 
 			if (auto rawLayout = mainMenu->getLayout()) {
 				if (auto layout = typeinfo_cast<AxisLayout*>(rawLayout)) {
