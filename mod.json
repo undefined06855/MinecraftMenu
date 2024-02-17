@@ -10,6 +10,7 @@
 	"developer": "undefined0",
 	"description": "geode == fabric basically",
 	"repository": "https://github.com/undefined06855/MinecraftMenu",
+	"tags": [ "interface" ],
 	"dependencies": [
 		{
 			"id": "shineua.minecraft_splash",
