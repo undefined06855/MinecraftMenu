@@ -19,9 +19,13 @@
 		}
 	],
 
+	"resources": {
+		"files": [ "resources/mcbtn.png" ]
+	},
+
 	"settings": {
 		"scale": {
-			"name": "GUI Scale",
+			"name": "GUI scale",
 			"type": "float",
 			"default": 1.5,
 			"min": 0.9,
@@ -29,6 +33,11 @@
 			"control": {
 				"slider": true
 			}
+		},
+		"btntype": {
+			"name": "Use Minecraft's buttons",
+			"default": false,
+			"type": "bool"
 		}
 	}
 }

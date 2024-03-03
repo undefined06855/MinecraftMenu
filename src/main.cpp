@@ -4,11 +4,20 @@
 
 using namespace geode::prelude;
 
+float btnWidth = 180;
+float smallbtnWidth = 120;
+float btnHeight = 23;
+
+void formatScale9Sprite(CCScale9Sprite* sprite, bool isSmall)
+{
+	if (isSmall) sprite->setContentSize(CCSize{ smallbtnWidth, btnHeight });
+	else         sprite->setContentSize(CCSize{ btnWidth, btnHeight });
+}
+
 // dont really know how to make a button open the mods list
 // so this is the best workaround
 class FakeLayer : public CCLayer {
 public:
-
 	void onModList(CCObject* sender)
 	{
 		geode::openModsList();
@@ -49,6 +58,8 @@ class $modify(MenuLayer) {
 		if (auto btm = typeinfo_cast<CCMenu*>(this->getChildByID("bottom-menu")))	btm->updateLayout();
 		if (auto clm = typeinfo_cast<CCMenu*>(this->getChildByID("close-menu")))	clm->updateLayout();
 		
+		// TODO: minecraft style buttons
+		// if (Mod::get()->getSettingValue(""))
 		// pad the play and editor buttons with spaces to make the clickable area larger than it actually is
 		auto playSprite = ButtonSprite::create("     Play     ");
 		auto editorSprite = ButtonSprite::create("     Editor     ");
@@ -56,6 +67,8 @@ class $modify(MenuLayer) {
 		auto modsSprite = ButtonSprite::create("Mods");
 		auto optionsSprite = ButtonSprite::create("Options");
 		auto quitSprite = ButtonSprite::create("Quit Game");
+
+		
 
 		auto playButton = CCMenuItemSpriteExtra::create(playSprite, this, menu_selector(MenuLayer::onPlay));
 		auto editorButton = CCMenuItemSpriteExtra::create(editorSprite, this, menu_selector(MenuLayer::onCreator));
@@ -67,15 +80,12 @@ class $modify(MenuLayer) {
 		float scale = 0.675;
 
 		// change the width + height so they're all the same
-		float btnWidth = 180;
-		float smallbtnWidth = 120;
-		float btnHeight = 23;
-		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(playSprite->getChildren()->objectAtIndex(1)))		ccscale9sprite->setContentSize(CCSize{ btnWidth, btnHeight });
-		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(editorSprite->getChildren()->objectAtIndex(1)))	ccscale9sprite->setContentSize(CCSize{ btnWidth, btnHeight });
-		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(iconsSprite->getChildren()->objectAtIndex(1)))		ccscale9sprite->setContentSize(CCSize{ smallbtnWidth, btnHeight });
-		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(modsSprite->getChildren()->objectAtIndex(1)))		ccscale9sprite->setContentSize(CCSize{ smallbtnWidth, btnHeight });
-		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(optionsSprite->getChildren()->objectAtIndex(1)))	ccscale9sprite->setContentSize(CCSize{ smallbtnWidth, btnHeight });
-		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(quitSprite->getChildren()->objectAtIndex(1)))		ccscale9sprite->setContentSize(CCSize{ smallbtnWidth, btnHeight });
+		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(playSprite->getChildren()->objectAtIndex(1)))		formatScale9Sprite(ccscale9sprite, false);
+		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(editorSprite->getChildren()->objectAtIndex(1)))	formatScale9Sprite(ccscale9sprite, false);
+		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(iconsSprite->getChildren()->objectAtIndex(1)))		formatScale9Sprite(ccscale9sprite, true);
+		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(modsSprite->getChildren()->objectAtIndex(1)))		formatScale9Sprite(ccscale9sprite, true);
+		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(optionsSprite->getChildren()->objectAtIndex(1)))	formatScale9Sprite(ccscale9sprite, true);
+		if (auto ccscale9sprite = typeinfo_cast<CCScale9Sprite*>(quitSprite->getChildren()->objectAtIndex(1)))		formatScale9Sprite(ccscale9sprite, true);
 
 		if (auto label = typeinfo_cast<CCLabelBMFont*>(playSprite->getChildren()->objectAtIndex(0)))	label->setScale(scale);
 		if (auto label = typeinfo_cast<CCLabelBMFont*>(editorSprite->getChildren()->objectAtIndex(0)))	label->setScale(scale);
@@ -124,7 +134,7 @@ class $modify(MenuLayer) {
 			mainMenu->setPositionY(218);
 			mainMenu->setAnchorPoint(CCPoint{ 0.5, 1 });
 			mainMenu->setScale(Mod::get()->getSettingValue<double>("scale"));
-
+			 
 			if (auto rawLayout = mainMenu->getLayout()) {
 				if (auto layout = typeinfo_cast<AxisLayout*>(rawLayout)) {
 					layout->setAxis(Axis::Column);
